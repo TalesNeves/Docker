@@ -1,0 +1,47 @@
+<body>
+  <h1><input id="campoSenha" type="password"> </h1>
+  <script>
+
+    window.onload = function () {
+
+      fetch("http://localhost:3200/show", {
+        method: "get",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json()).
+        then(json => json["produtos"]).
+        then(produtos =>
+          criaTabela(produtos)
+        )
+
+    }
+
+    function criaTabela(lista) {
+
+         keys = []
+
+      document.write("<table border==\"1\"><tr>");
+
+      for (key in lista[0]) {
+        document.write('<td>' + key + '</td>');
+      }
+      document.write("</tr>");
+
+      for (var i = 0; i < lista.length; i++) {
+        document.write('<tr>');
+
+        for (key in lista[i]) {
+          document.write('<td>' + lista[i][key] + '</td>');
+        }
+        document.write('</tr>');
+      }
+      document.write("</table>");
+
+    }
+
+  </script>
+</body>
+
+</html>

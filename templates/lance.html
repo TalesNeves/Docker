@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <title>Page Title</title>
+</head>
+
+<h1>Valor do Lance<input id="campoValor" type="number"> </h1>
+<h1>ID do Produto<input id="campoID" type="number"> </h1>
+<button id='getData' onclick="Decode(sessionStorage.getItem('token'))">Submeter</button>
+<!-- <h1><input id="campoSenha" type="password"> </h1> -->
+
+<body>
+    <script>
+        function Decode(token){
+            const response = await fetch("http://localhost:3200/decode/" + token, {
+                method: "get",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            const json =  await response.json()
+            MakeBid(json.email)
+        }
+
+        function MakeBid(email) {
+            id = document.getElementById("campoID").value
+            valor = document.getElementById("campoValor").value
+            console.log(id)
+            fetch("http://localhost:3200/makebid/" + id + "/" + valor, {
+                method: "put",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+
+                //make sure to serialize your JSON body
+                body: JSON.stringify({
+                    "comprador": email
+                })
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>

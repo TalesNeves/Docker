@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <title>Page Title</title>
+</head>
+
+<h1>Email<input id="campoEmail" type="text"> </h1>
+
+<h1>Senha<input id="campoSenha" type="password"> </h1>
+
+<body>
+  <script>
+
+    async function GetAuth() {
+      try {
+        const response = await fetch("http://localhost:3200/authorize", {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          //make sure to serialize your JSON body
+          body: JSON.stringify({
+            email: document.getElementById("campoEmail").value,
+            senha: document.getElementById("campoSenha").value,
+          })
+        })
+        const json = await response.json()
+        const status = await response.status
+        if (status == 200) {
+          // console.log(json)
+          sessionStorage.setItem('token', json.token);
+          location.href = "/catalogo";
+        }
+        else {
+          alert("Erro no login")
+        }
+      } catch (error) {
+        alert("erro no login")
+        console.error(error)
+      }
+    }
+
+  </script>
+  <button id='getData' onclick="GetAuth()">Entrar</button>
+
+</body>
+
+</html>

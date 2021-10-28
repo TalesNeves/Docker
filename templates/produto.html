@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Page Title</title>
+</head>
+
+<h1>Valor minimo do produto<input id="campoValor" type="number"> </h1>
+
+<h1>Titulo do produto<input id="campoTitulo"> </h1>
+<!-- <h1><input id="campoSenha" type="password"> </h1> -->
+
+<body>
+    <script>
+        async function Decode(token) {
+            const response = await fetch("http://localhost:3200/decode/" + token, {
+                method: "get",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            const json = await response.json()
+            email = json.token.email
+            Cadastra(email)
+        }
+        async function Cadastra(email) {
+            try {
+                const response = await fetch("http://localhost:3200/produto", {
+                    method: "post",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+
+                    //make sure to serialize your JSON body
+                    body: JSON.stringify({
+                        "titulo": document.getElementById("campoTitulo").value,
+                        "comprador": "",
+                        "vendedor": email,
+                        "valor": document.getElementById("campoValor").value,
+                    })
+
+                })
+            }
+            catch (error) {
+                alert("erro no login")
+                console.error(error)
+                console.log(email)
+            }
+
+        }
+    </script>
+    <button id='getData' onclick="Decode(sessionStorage.getItem('token'))">Cadastrar</button>
+</body>
+
+</html>

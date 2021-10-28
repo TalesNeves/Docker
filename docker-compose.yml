@@ -1,0 +1,38 @@
+version: '3.8'
+
+networks:
+  trab-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:3201"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      trab-network:
+        ipv4_address: 172.20.0.5
+  
+  db:
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_DATABASE: main
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .dbdata:/var/lib/mysql
+    ports:
+      - 3308:3306
+    networks:
+      trab-network:
+        ipv4_address: 172.20.0.6
